@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Puzzle {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  objectName       String
+  objectPersona    String
+  introText        String
+  imageUrl         String
+  chainLength      Int
+  difficulty       String
+  rawLlmResponse   String?
+  parsedPuzzleJson Json
+  attempts         Attempt[]
+}
+
+model Attempt {
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  puzzleId           String
+  submittedChainJson Json
+  valid              Boolean
+  score              Int
+  wooMeter           Int
+  feedbackJson       Json
+  puzzle             Puzzle   @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+
+  @@index([puzzleId, createdAt])
+}

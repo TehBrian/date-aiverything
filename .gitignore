@@ -31,10 +31,16 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# logs
+*.log
+
 # local env files
 # do not commit any .env files to git, except for the .env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
 .env
 .env*.local
+
+# uploads
+public/uploads/
 
 # vercel
 .vercel
@@ -42,5 +48,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# idea files
-.idea
+# editor files
+.vscode/
+.idea/
+
+# prisma local databases
+prisma/*.db
+prisma/*.sqlite
+prisma/dev.db
