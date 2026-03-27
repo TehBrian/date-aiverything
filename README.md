@@ -13,7 +13,7 @@ The user uploads an object photo, the app generates a "date this object" puzzle 
 - Next.js (App Router)
 - TypeScript
 - tRPC
-- Prisma + SQLite
+- Prisma + Neon Postgres
 - Tailwind CSS
 - OpenAI SDK (provider abstraction; fallback mode supported)
 
@@ -42,7 +42,19 @@ The user uploads an object photo, the app generates a "date this object" puzzle 
 pnpm install
 ```
 
-2. Configure environment variables by copying `.env.example` to `.env` and editing values.
+2. Pull environment variables from Vercel (recommended when Neon is connected):
+
+```bash
+vercel env pull .env.development.local
+```
+
+Prisma CLI reads `.env` by default. After pulling to `.env.development.local`, sync it for Prisma commands:
+
+```bash
+cp .env.development.local .env
+```
+
+If you are not using Vercel-managed envs locally, copy `.env.example` to `.env` and set values manually.
 
 3. Generate Prisma client:
 
@@ -68,9 +80,12 @@ pnpm dev
 
 Defined in `.env.example` and validated in `src/env.js`.
 
-- `DATABASE_URL`
-  - SQLite connection string.
-  - Default: `file:./prisma/db.sqlite`
+- `POSTGRES_PRISMA_URL`
+  - Prisma client connection string (pooled).
+  - Auto-provided by Vercel when Neon integration is connected.
+- `POSTGRES_URL_NON_POOLING`
+  - Direct Postgres connection string used by Prisma migrations.
+  - Auto-provided by Vercel when Neon integration is connected.
 - `OPENAI_API_KEY`
   - Optional for MVP.
   - If empty, app uses deterministic fallback puzzle mode.

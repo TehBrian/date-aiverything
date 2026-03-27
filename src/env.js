@@ -8,7 +8,8 @@ export const env = createEnv({
 	 */
 	server: {
 		NODE_ENV: z.enum(["development", "test", "production"]),
-		DATABASE_URL: z.string().url(),
+		POSTGRES_PRISMA_URL: z.url(),
+		POSTGRES_URL_NON_POOLING: z.url().optional(),
 		OPENAI_API_KEY: z.string().optional(),
 		OPENAI_MODEL: z.string().default("gpt-4.1-mini"),
 		MAX_UPLOAD_MB: z.coerce.number().int().positive().default(6),
@@ -29,7 +30,8 @@ export const env = createEnv({
 	 */
 	runtimeEnv: {
 		NODE_ENV: process.env.NODE_ENV,
-		DATABASE_URL: process.env.DATABASE_URL,
+		POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
+		POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING,
 		OPENAI_API_KEY: process.env.OPENAI_API_KEY,
 		OPENAI_MODEL: process.env.OPENAI_MODEL,
 		MAX_UPLOAD_MB: process.env.MAX_UPLOAD_MB,

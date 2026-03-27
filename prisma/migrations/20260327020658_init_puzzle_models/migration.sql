@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "Puzzle" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "objectName" TEXT NOT NULL,
     "objectPersona" TEXT NOT NULL,
     "introText" TEXT NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE "Puzzle" (
 -- CreateTable
 CREATE TABLE "Attempt" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "puzzleId" TEXT NOT NULL,
     "submittedChainJson" JSONB NOT NULL,
     "valid" BOOLEAN NOT NULL,
