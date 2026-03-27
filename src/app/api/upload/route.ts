@@ -29,6 +29,9 @@ const extFromMime = (mime: string): string => {
 	}
 };
 
+const toDataUrl = (mimeType: string, fileBuffer: Buffer): string =>
+	`data:${mimeType};base64,${fileBuffer.toString("base64")}`;
+
 export async function POST(request: Request) {
 	try {
 		const formData = await request.formData();
@@ -59,13 +62,20 @@ export async function POST(request: Request) {
 		const fileBuffer = Buffer.from(bytes);
 
 		const uploadsDir = path.join(process.cwd(), "public", "uploads");
-		await mkdir(uploadsDir, { recursive: true });
 		const fileName = `${Date.now()}-${crypto.randomUUID()}.${extFromMime(file.type)}`;
-		const destination = path.join(uploadsDir, fileName);
-		await writeFile(destination, fileBuffer);
 
-		const imageUrl = `/uploads/${fileName}`;
-		return NextResponse.json({ imageUrl });
+		try {
+			await mkdir(uploadsDir, { recursive: true });
+			const destination = path.join(uploadsDir, fileName);
+			await writeFile(destination, fileBuffer);
+			return NextResponse.json({ imageUrl: `/uploads/${fileName}` });
+		} catch (filesystemError) {
+			console.warn(
+				"Upload storage fallback to data URL due to filesystem write failure",
+				filesystemError,
+			);
+			return NextResponse.json({ imageUrl: toDataUrl(file.type, fileBuffer) });
+		}
 	} catch (error) {
 		console.error("Upload failed", error);
 		return NextResponse.json({ error: "Upload failed." }, { status: 500 });
