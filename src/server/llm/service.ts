@@ -70,7 +70,8 @@ const normalizeLlmPuzzlePayload = (payload: unknown): unknown => {
 
 		return {
 			id: pickString(card, ["id", "cardId", "card_id"]) ?? `card_${index + 1}`,
-			label: pickString(card, ["label", "name", "title"]) ?? `Card ${index + 1}`,
+			label:
+				pickString(card, ["label", "name", "title"]) ?? `Card ${index + 1}`,
 			category: pickString(card, ["category", "group", "type"]) ?? "general",
 			tags,
 			baseScore: Math.trunc(
@@ -178,11 +179,8 @@ const normalizeLlmPuzzlePayload = (payload: unknown): unknown => {
 						pickString(constraint, ["ifCardId", "firstCardId", "cardAId"]) ??
 						"",
 					thenCardId:
-						pickString(constraint, [
-							"thenCardId",
-							"secondCardId",
-							"cardBId",
-						]) ?? "",
+						pickString(constraint, ["thenCardId", "secondCardId", "cardBId"]) ??
+						"",
 					message,
 				};
 			default:
@@ -210,13 +208,18 @@ const normalizeLlmPuzzlePayload = (payload: unknown): unknown => {
 
 	return {
 		objectName:
-			pickString(payload, ["objectName", "object_name", "name"]) ?? "Unknown object",
+			pickString(payload, ["objectName", "object_name", "name"]) ??
+			"Unknown object",
 		objectPersona:
 			pickString(payload, ["objectPersona", "object_persona", "persona"]) ??
 			"Mysterious object crush",
 		introText:
-			pickString(payload, ["introText", "intro_text", "intro", "description"]) ??
-			"This object has complicated feelings.",
+			pickString(payload, [
+				"introText",
+				"intro_text",
+				"intro",
+				"description",
+			]) ?? "This object has complicated feelings.",
 		chainLength: Math.max(
 			3,
 			Math.min(
@@ -225,7 +228,8 @@ const normalizeLlmPuzzlePayload = (payload: unknown): unknown => {
 			),
 		),
 		allowRepeatedCards:
-			pickBoolean(payload, ["allowRepeatedCards", "allow_repeated_cards"]) ?? false,
+			pickBoolean(payload, ["allowRepeatedCards", "allow_repeated_cards"]) ??
+			false,
 		cards: normalizedCards,
 		constraints: normalizedConstraints,
 		scoring: {
@@ -246,16 +250,21 @@ const normalizeLlmPuzzlePayload = (payload: unknown): unknown => {
 						pickString(pair, ["firstCardId", "cardAId", "card1Id", "first"]) ??
 						"",
 					secondCardId:
-						pickString(pair, ["secondCardId", "cardBId", "card2Id", "second"]) ??
-						"",
-					bonus: Math.trunc(pickNumber(pair, ["bonus", "score", "weight"]) ?? 1),
+						pickString(pair, [
+							"secondCardId",
+							"cardBId",
+							"card2Id",
+							"second",
+						]) ?? "",
+					bonus: Math.trunc(
+						pickNumber(pair, ["bonus", "score", "weight"]) ?? 1,
+					),
 				};
 			}),
 			penalties: penaltiesRaw.map((penalty) => {
 				if (!isRecord(penalty)) return penalty;
 				return {
-					cardId:
-						pickString(penalty, ["cardId", "targetCardId", "id"]) ?? "",
+					cardId: pickString(penalty, ["cardId", "targetCardId", "id"]) ?? "",
 					penalty: Math.max(
 						0,
 						Math.trunc(
