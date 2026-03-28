@@ -185,32 +185,36 @@ export function DateAnythingApp() {
 				</header>
 
 				<div className="grid gap-6 lg:grid-cols-[1.15fr_1.6fr_1.25fr]">
-					<UploadPanel
-						errorMessage={errorMessage}
-						hasFile={Boolean(selectedFile)}
-						isGenerating={generateMutation.isPending}
-						onFileChange={setSelectedFile}
-						onGenerate={handleGenerate}
-						previewUrl={previewUrl}
-					/>
+					<div className="space-y-4">
+						<UploadPanel
+							errorMessage={errorMessage}
+							hasFile={Boolean(selectedFile)}
+							isGenerating={generateMutation.isPending}
+							onFileChange={setSelectedFile}
+							onGenerate={handleGenerate}
+							previewUrl={previewUrl}
+						/>
+						{puzzle ? (
+							<section className="rounded-3xl border border-white/15 bg-black/30 p-5">
+								<h2 className="font-semibold text-white text-xl">
+									2) Meet Your Object
+								</h2>
+								<p className="mt-2 text-slate-300 text-sm">
+									{puzzle.objectName}
+								</p>
+								<p className="mt-1 text-amber-200 text-sm">
+									{puzzle.objectPersona}
+								</p>
+								<p className="mt-3 rounded-xl border border-amber-300/25 bg-amber-400/10 p-3 text-slate-100 text-sm">
+									{puzzle.introText}
+								</p>
+							</section>
+						) : null}
+					</div>
 
 					<div className="space-y-4">
 						{puzzle ? (
 							<>
-								<section className="rounded-3xl border border-white/15 bg-black/30 p-5">
-									<h2 className="font-semibold text-white text-xl">
-										2) Meet Your Object
-									</h2>
-									<p className="mt-2 text-slate-300 text-sm">
-										{puzzle.objectName}
-									</p>
-									<p className="mt-1 text-amber-200 text-sm">
-										{puzzle.objectPersona}
-									</p>
-									<p className="mt-3 rounded-xl border border-amber-300/25 bg-amber-400/10 p-3 text-slate-100 text-sm">
-										{puzzle.introText}
-									</p>
-								</section>
 								<ConstraintList constraints={puzzle.constraints} />
 								<ChainBuilder
 									chain={chain}
@@ -234,7 +238,9 @@ export function DateAnythingApp() {
 						)}
 					</div>
 
-					<ResultPanel solveResult={solveResult} validation={validation} />
+					<div>
+						<ResultPanel solveResult={solveResult} validation={validation} />
+					</div>
 				</div>
 			</div>
 		</main>
