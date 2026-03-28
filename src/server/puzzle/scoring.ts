@@ -43,7 +43,15 @@ export const computeScore = (
 	return score;
 };
 
-export const computeWooMeter = (score: number): number => {
-	// Normalizes score into a playful 0-100 meter for UI display.
-	return Math.round(clamp(50 + score * 4, 0, 100));
+export const computeWooMeter = (
+	violationCount: number,
+	totalChecks: number,
+): number => {
+	if (violationCount <= 0) {
+		return 100;
+	}
+
+	// Linear scaling by failed-check ratio; only solved chains can show 100%.
+	const solvedRatio = 1 - violationCount / Math.max(totalChecks, 1);
+	return Math.round(clamp(solvedRatio * 100, 0, 99));
 };

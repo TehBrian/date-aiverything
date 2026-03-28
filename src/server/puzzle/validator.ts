@@ -67,7 +67,13 @@ export const validateChain = (
 		constraintStatuses.find((status) => !status.passed)?.triggerIndex ?? null;
 
 	const score = computeScore(submittedChain, puzzle, cardsById);
-	const wooMeter = computeWooMeter(score);
+	const failedChecks =
+		violatedByConstraints.length +
+		(lengthOk ? 0 : 1) +
+		(duplicateViolation ? 1 : 0) +
+		(unknownCardIds.length > 0 ? 1 : 0);
+	const totalChecks = puzzle.constraints.length + 3;
+	const wooMeter = computeWooMeter(failedChecks, totalChecks);
 	const valid =
 		lengthOk &&
 		!duplicateViolation &&
